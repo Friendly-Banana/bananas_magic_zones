@@ -24,8 +24,11 @@ public final class BananasSpawn extends JavaPlugin {
     public List<Portal> PortalsWithName(String name) {
         try {
             int id = Integer.parseInt(name);
-            if (id > 1 && id <= portals.size())
-                return Collections.singletonList(portals.get(id - 1));
+            if (id >= 0) {
+                List<Portal> p = portals.stream().filter(portal -> portal.id == id).toList();
+                if (!p.isEmpty())
+                    return p;
+            }
         } catch (NumberFormatException ignored) {
         }
         return portals.stream().filter(portal -> portal.name.equals(name)).toList();
@@ -39,6 +42,7 @@ public final class BananasSpawn extends JavaPlugin {
         getCommand("create").setExecutor(new CreatePortalCommand(this));
         getCommand("remove").setExecutor(new RemovePortalCommand(this));
         getCommand("select").setExecutor(new SelectPortalCommand(this));
+        getCommand("select").setTabCompleter((sender, command, alias, args) -> portals.stream().filter(portal -> portal.name.startsWith(args[0])).map(portal -> portal.name).toList());
         getCommand("rename").setExecutor(new RenamePortalCommand(this));
         getCommand("command").setExecutor(new SetPortalCommand(this));
         getCommand("pos1").setExecutor(new Pos1PortalCommand(this));
@@ -52,14 +56,18 @@ public final class BananasSpawn extends JavaPlugin {
             section = getConfig().createSection(PORTALS_KEY);
         for (String key : section.getKeys(false))
             portals.add(Portal.Load(section, key));
+        Portal.nextId = portals.size();
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        ConfigurationSection section = getConfig().getConfigurationSection(PORTALS_KEY);
+        if (section == null)
+            section = getConfig().createSection(PORTALS_KEY);
         for (int i = 0; i < portals.size(); i++) {
-            portals.get(i).SetIndicators(false, getServer());
-            portals.get(i).Save(getConfig(), PORTALS_KEY + "." + i);
+            portals.get(i).RemoveIndicators();
+            portals.get(i).Save(section, i);
         }
         saveConfig();
     }

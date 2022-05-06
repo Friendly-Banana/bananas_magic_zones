@@ -18,6 +18,7 @@ public class CreatePortalCommand extends PortalCommand {
             Portal portal = new Portal(name, cmd, player.getWorld().getName(), player.getBoundingBox(), true);
             plugin.AddPortal(portal);
             sender.sendMessage("Created new portal " + portal.name);
+            player.performCommand("select " + portal.name);
         }
         return true;
     }
