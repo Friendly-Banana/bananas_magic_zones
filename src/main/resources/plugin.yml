@@ -1,0 +1,40 @@
+name: BananasSpawn
+version: '${project.version}'
+main: ga.euroblox.bananas_spawn.BananasSpawn
+api-version: 1.18
+load: STARTUP
+authors: [ Banana ]
+commands:
+  lobby:
+    usage: "Usage: /lobby"
+    description: Teleports you to the lobby
+  list:
+    usage: "Usage: /list"
+    description: List all portals
+  select:
+    usage: "Usage: /select name|index"
+    description: Select portal(s)
+  create:
+    usage: "Usage: /create [name] [command]"
+    description: Create portal
+  remove:
+    usage: "Usage: /remove"
+    description: Remove selected portal(s)
+  show:
+    usage: "Usage: /show"
+    description: Show selected portal(s)
+  hide:
+    usage: "Usage: /hide"
+    description: Hide selected portal(s)
+  command:
+    usage: "Usage: /command"
+    description: Set the command of selected portal(s)
+  rename:
+    usage: "Usage: /rename"
+    description: Rename selected portal(s)
+  pos1:
+    usage: "Usage: /pos1 x y z"
+    description: Set the first corner of selected portal(s)
+  pos2:
+    usage: "Usage: /pos2 x y z"
+    description: Set the second corner of selected portal(s)
