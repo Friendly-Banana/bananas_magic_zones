@@ -8,7 +8,7 @@
     <version>0.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Bananas Utils</name>
+    <name>Bananas Magic Zones</name>
 
     <properties>
         <java.version>1.8</java.version>

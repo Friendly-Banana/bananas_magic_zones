@@ -1,14 +1,14 @@
-package ga.euroblox.bananas_spawn.commands;
+package ga.euroblox.bananas_magic_zones.commands;
 
-import ga.euroblox.bananas_spawn.BananasSpawn;
-import ga.euroblox.bananas_spawn.Portal;
+import ga.euroblox.bananas_magic_zones.BananasMagicZones;
+import ga.euroblox.bananas_magic_zones.Portal;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
 
 public class RenamePortalCommand extends PortalCommand {
-    public RenamePortalCommand(BananasSpawn plugin) {
+    public RenamePortalCommand(BananasMagicZones plugin) {
         super(plugin, true);
     }
 

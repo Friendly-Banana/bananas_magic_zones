@@ -1,16 +1,21 @@
-package ga.euroblox.bananas_spawn;
+package ga.euroblox.bananas_magic_zones;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import java.text.DecimalFormat;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 public final class Portal {
     private static final DecimalFormat doubleFormat = new DecimalFormat("##.##");
@@ -24,6 +29,8 @@ public final class Portal {
     public final int id;
     private final String worldName;
     private final BoundingBox box;
+    // the players we already performed the command for
+    private final Set<UUID> enteredPlayers = new HashSet<>();
     public String name;
     public String command;
     boolean visible;
@@ -57,9 +64,19 @@ public final class Portal {
         section.set(key + boxKey, box);
     }
 
-    public boolean Contains(Location location) {
-        if (location.getWorld().getName().equals(worldName))
-            return box.contains(location.toVector());
+    public boolean TryExecute(Player player, Location location) {
+        if (Contains(location)) {
+            // not already in portal
+            if (enteredPlayers.add(player.getUniqueId())) {
+                player.performCommand(command);
+                return true;
+            }
+        } else enteredPlayers.remove(player.getUniqueId());
+        return false;
+    }
+
+    private boolean Contains(Location location) {
+        if (location.getWorld().getName().equals(worldName)) return box.contains(location.toVector());
         return false;
     }
 
@@ -87,8 +104,6 @@ public final class Portal {
 
     public void SetIndicators(boolean active, World world) {
         visible = active;
-        System.out.println(pos1Indicator);
-        System.out.println(pos1Indicator == null ? null : pos1Indicator.isValid());
         if (active && pos1Indicator == null) {
             assert world != null;
             pos1Indicator = SpawnIndicator(world, box.getMin(), "Pos1");
@@ -117,12 +132,11 @@ public final class Portal {
 
     @Override
     public String toString() {
-        return name + "  id: " + id +
-                ", command: <" + command +
-                ">, visible: " + visible +
-                ", worldName: " + worldName +
-                ", pos1: " + formatVector(box.getMin()) +
-                ", pos2: " + formatVector(box.getMax());
+        return name + "  id: " + id + ", command: <" + command + ">, visible: " + visible + ", dimension: " + worldName + ", pos1: " + formatVector(box.getMin()) + ", pos2: " + formatVector(box.getMax());
+    }
+
+    public Component Info() {
+        return Utils.SpaceJoin(Component.text(name).color(Utils.GOLD).decoration(TextDecoration.BOLD, true), Component.text("id: " + id).decoration(TextDecoration.BOLD, false), Component.text("command: ").append(Utils.Command(command, command)), "visible: " + visible, "dimension: " + worldName, "pos1: " + Utils.Command(formatVector(box.getMin()), "/tp @s " + formatVector(box.getMin())), "pos2: " + Utils.Command(formatVector(box.getMax()), "/tp @s " + formatVector(box.getMax())));
     }
 
     private String formatVector(Vector vector) {

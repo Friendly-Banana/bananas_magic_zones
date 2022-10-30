@@ -1,4 +1,4 @@
-package ga.euroblox.bananas_spawn.commands;
+package ga.euroblox.bananas_magic_zones.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

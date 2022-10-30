@@ -1,12 +1,15 @@
-package ga.euroblox.bananas_spawn;
+package ga.euroblox.bananas_magic_zones;
 
-import ga.euroblox.bananas_spawn.commands.*;
+import ga.euroblox.bananas_magic_zones.commands.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public final class BananasSpawn extends JavaPlugin {
+public final class BananasMagicZones extends JavaPlugin {
     private static final String PORTALS_KEY = "portals";
     public List<Portal> portals = new ArrayList<>();
     public Set<UUID> portalSeer = new HashSet<>();
@@ -41,14 +44,17 @@ public final class BananasSpawn extends JavaPlugin {
         getCommand("lobby").setExecutor(new LobbyCommand());
         getCommand("create").setExecutor(new CreatePortalCommand(this));
         getCommand("remove").setExecutor(new RemovePortalCommand(this));
+        getCommand("remove").setTabCompleter(this::TabCompletePortals);
         getCommand("select").setExecutor(new SelectPortalCommand(this));
-        getCommand("select").setTabCompleter((sender, command, alias, args) -> portals.stream().filter(portal -> portal.name.startsWith(args[0])).map(portal -> portal.name).toList());
+        getCommand("select").setTabCompleter(this::TabCompletePortals);
         getCommand("rename").setExecutor(new RenamePortalCommand(this));
         getCommand("command").setExecutor(new SetPortalCommand(this));
         getCommand("pos1").setExecutor(new Pos1PortalCommand(this));
         getCommand("pos2").setExecutor(new Pos2PortalCommand(this));
         getCommand("show").setExecutor(new ShowPortalCommand(this));
+        getCommand("show").setTabCompleter(this::TabCompletePortals);
         getCommand("hide").setExecutor(new HidePortalCommand(this));
+        getCommand("hide").setTabCompleter(this::TabCompletePortals);
         getCommand("list").setExecutor(new ListPortalCommand(this));
 
         ConfigurationSection section = getConfig().getConfigurationSection(PORTALS_KEY);
@@ -70,5 +76,9 @@ public final class BananasSpawn extends JavaPlugin {
             portals.get(i).Save(section, i);
         }
         saveConfig();
+    }
+
+    private List<String> TabCompletePortals(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        return portals.stream().filter(portal -> portal.name.startsWith(args[0])).map(portal -> portal.name).toList();
     }
 }

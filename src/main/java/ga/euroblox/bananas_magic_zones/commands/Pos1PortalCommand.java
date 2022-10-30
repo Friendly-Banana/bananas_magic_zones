@@ -1,13 +1,13 @@
-package ga.euroblox.bananas_spawn.commands;
+package ga.euroblox.bananas_magic_zones.commands;
 
-import ga.euroblox.bananas_spawn.BananasSpawn;
-import ga.euroblox.bananas_spawn.Portal;
+import ga.euroblox.bananas_magic_zones.BananasMagicZones;
+import ga.euroblox.bananas_magic_zones.Portal;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 
-public class Pos2PortalCommand extends PortalCommand {
-    public Pos2PortalCommand(BananasSpawn plugin) {
+public class Pos1PortalCommand extends PortalCommand {
+    public Pos1PortalCommand(BananasMagicZones plugin) {
         super(plugin, true);
     }
 
@@ -21,8 +21,8 @@ public class Pos2PortalCommand extends PortalCommand {
             pos[i] = Double.parseDouble(args[i]);
         }
         for (Portal portal : portals)
-            portal.SetPos2(pos);
-        sender.sendMessage("Set pos2 of " + portals.size() + " Portal(s) to " + pos[0] + ", " + pos[1] + ", " + pos[2]);
+            portal.SetPos1(pos);
+        sender.sendMessage("Set pos1 of " + portals.size() + " Portal(s) to " + pos[0] + ", " + pos[1] + ", " + pos[2]);
         return true;
     }
 }

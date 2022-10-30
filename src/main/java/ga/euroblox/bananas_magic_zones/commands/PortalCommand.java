@@ -1,7 +1,7 @@
-package ga.euroblox.bananas_spawn.commands;
+package ga.euroblox.bananas_magic_zones.commands;
 
-import ga.euroblox.bananas_spawn.BananasSpawn;
-import ga.euroblox.bananas_spawn.Portal;
+import ga.euroblox.bananas_magic_zones.BananasMagicZones;
+import ga.euroblox.bananas_magic_zones.Portal;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,9 +15,9 @@ import java.util.UUID;
 public abstract class PortalCommand implements CommandExecutor {
     static final HashMap<UUID, String> selectedPortals = new HashMap<>();
     protected final boolean requiresName;
-    protected final BananasSpawn plugin;
+    protected final BananasMagicZones plugin;
 
-    public PortalCommand(BananasSpawn plugin, boolean requiresName) {
+    public PortalCommand(BananasMagicZones plugin, boolean requiresName) {
         this.plugin = plugin;
         this.requiresName = requiresName;
     }

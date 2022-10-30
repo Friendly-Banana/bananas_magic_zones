@@ -1,10 +1,10 @@
-package ga.euroblox.bananas_spawn;
+package ga.euroblox.bananas_magic_zones;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.world.WorldLoadEvent;
 
-public record WorldEventListener(BananasSpawn plugin) implements Listener {
+public record WorldEventListener(BananasMagicZones plugin) implements Listener {
 
     @EventHandler
     public void onWorldLoad(WorldLoadEvent event) {

@@ -1,6 +1,6 @@
-name: BananasSpawn
+name: BananasMagicZones
 version: '${project.version}'
-main: ga.euroblox.bananas_spawn.BananasSpawn
+main: ga.euroblox.bananas_magic_zones.BananasMagicZones
 api-version: 1.18
 load: STARTUP
 authors: [ Banana ]
