@@ -7,7 +7,7 @@ authors: [ Banana ]
 commands:
   lobby:
     usage: "Usage: /lobby"
-    description: Teleports you to the lobby
+    description: Teleports you to the world spawn
   list:
     usage: "Usage: /list"
     description: List all portals
@@ -27,14 +27,14 @@ commands:
     usage: "Usage: /hide"
     description: Hide selected portal(s)
   command:
-    usage: "Usage: /command"
+    usage: "Usage: /command command"
     description: Set the command of selected portal(s)
   rename:
-    usage: "Usage: /rename"
+    usage: "Usage: /rename to"
     description: Rename selected portal(s)
   pos1:
-    usage: "Usage: /pos1 x y z"
+    usage: "Usage: /pos1 [x y z]"
     description: Set the first corner of selected portal(s)
   pos2:
-    usage: "Usage: /pos2 x y z"
+    usage: "Usage: /pos2 [x y z]"
     description: Set the second corner of selected portal(s)

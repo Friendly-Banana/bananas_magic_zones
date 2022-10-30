@@ -12,13 +12,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
-import java.text.DecimalFormat;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 public final class Portal {
-    private static final DecimalFormat doubleFormat = new DecimalFormat("##.##");
     private static final String idKey = ".id";
     private static final String nameKey = ".name";
     private static final String worldKey = ".worldName";
@@ -76,25 +74,20 @@ public final class Portal {
     }
 
     private boolean Contains(Location location) {
-        if (location.getWorld().getName().equals(worldName)) return box.contains(location.toVector());
-        return false;
+        return location.getWorld().getName().equals(worldName) && box.contains(location.toVector());
     }
 
-    public void SetPos1(double[] pos) {
-        box.resize(pos[0], pos[1], pos[2], box.getMaxX(), box.getMaxY(), box.getMaxZ());
-        if (visible) {
-            Location location = pos1Indicator.getLocation();
-            location.set(pos[0], pos[1], pos[2]);
-            pos1Indicator.teleport(location);
+    public void SetPos1(Vector pos) {
+        box.resize(pos.getX(), pos.getY(), pos.getZ(), box.getMaxX(), box.getMaxY(), box.getMaxZ());
+        if (visible && pos1Indicator != null) {
+            pos1Indicator.teleport(pos.toLocation(pos1Indicator.getWorld()));
         }
     }
 
-    public void SetPos2(double[] pos) {
-        box.resize(box.getMinX(), box.getMinY(), box.getMinZ(), pos[0], pos[1], pos[2]);
-        if (visible) {
-            Location location = pos1Indicator.getLocation();
-            location.set(pos[0], pos[1], pos[2]);
-            pos2Indicator.teleport(location);
+    public void SetPos2(Vector pos) {
+        box.resize(box.getMinX(), box.getMinY(), box.getMinZ(), pos.getX(), pos.getY(), pos.getZ());
+        if (visible && pos2Indicator != null) {
+            pos2Indicator.teleport(pos.toLocation(pos2Indicator.getWorld()));
         }
     }
 
@@ -114,11 +107,11 @@ public final class Portal {
         }
     }
 
-    private Entity SpawnIndicator(World world, Vector pos, String nameSuffix) {
+    private Entity SpawnIndicator(World world, Vector pos, String namePrefix) {
         Entity entity = world.spawnEntity(new Location(world, pos.getX(), pos.getY(), pos.getZ()), EntityType.ARMOR_STAND);
         entity.setGravity(false);
         entity.setInvulnerable(true);
-        entity.customName(Component.text(name + " " + nameSuffix));
+        entity.customName(Component.text(namePrefix + ": " + name));
         entity.setCustomNameVisible(true);
         return entity;
     }
@@ -132,14 +125,10 @@ public final class Portal {
 
     @Override
     public String toString() {
-        return name + "  id: " + id + ", command: <" + command + ">, visible: " + visible + ", dimension: " + worldName + ", pos1: " + formatVector(box.getMin()) + ", pos2: " + formatVector(box.getMax());
+        return name + "  id: " + id + ", command: <" + command + ">, visible: " + visible + ", dimension: " + worldName + ", pos1: " + Utils.formatVector(box.getMin()) + ", pos2: " + Utils.formatVector(box.getMax());
     }
 
     public Component Info() {
-        return Utils.SpaceJoin(Component.text(name).color(Utils.GOLD).decoration(TextDecoration.BOLD, true), Component.text("id: " + id).decoration(TextDecoration.BOLD, false), Component.text("command: ").append(Utils.Command(command, command)), "visible: " + visible, "dimension: " + worldName, "pos1: " + Utils.Command(formatVector(box.getMin()), "/tp @s " + formatVector(box.getMin())), "pos2: " + Utils.Command(formatVector(box.getMax()), "/tp @s " + formatVector(box.getMax())));
-    }
-
-    private String formatVector(Vector vector) {
-        return doubleFormat.format(vector.getX()) + ", " + doubleFormat.format(vector.getY()) + ", " + doubleFormat.format(vector.getZ());
+        return Utils.SpaceJoin(Component.text(name).color(Utils.GOLD).decoration(TextDecoration.BOLD, true), Component.text("id: " + id).decoration(TextDecoration.BOLD, false), Component.text("command: ").append(Utils.Command(command, command)), "visible: " + visible, "dimension: " + worldName, "pos1: " + Utils.Command(Utils.formatVector(box.getMin()), "/tp @s " + Utils.formatVector(box.getMin())), "pos2: " + Utils.Command(Utils.formatVector(box.getMax()), "/tp @s " + Utils.formatVector(box.getMax())));
     }
 }

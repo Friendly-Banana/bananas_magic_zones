@@ -14,6 +14,11 @@ public record SelectPortalCommand(BananasMagicZones plugin) implements CommandEx
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (args.length == 0) {
+            if (sender instanceof Player player && PortalCommand.selectedPortals.containsKey(player.getUniqueId())) {
+                String name = PortalCommand.selectedPortals.get(player.getUniqueId());
+                sender.sendMessage("Selected " + plugin.PortalsWithName(name).size() + " portal(s) with name " + name);
+                return true;
+            }
             return false;
         }
         List<Portal> portals = plugin.PortalsWithName(args[0]);
